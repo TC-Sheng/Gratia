@@ -16,6 +16,21 @@ Gratia consists of two main subprojects:
 - Configuration:
   - Database connection string in appsettings.json
   - Uses QueryFirstOrDefaultAsync for database queries
+  - Logging configuration in appsettings.json:
+    ```json
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        },
+        "File": {
+          "Path": "logs/gratia-{Date}.log",
+          "MinimumLevel": "Information"
+        }
+      }
+    }
+    ```
 
 ### Gratia.Db
 - SQL Server Database Project
