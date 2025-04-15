@@ -27,7 +27,7 @@ public class EventRepository : IEventRepository
         return await connection.QueryAsync<SlackEvent>("SELECT * FROM Events");
     }
 
-    public async Task<long> CreateAsync(SlackEvent @event)
+    public async Task<long> CreateAsync(SlackEvent slackEvent)
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
@@ -35,10 +35,10 @@ public class EventRepository : IEventRepository
             VALUES (@Type, @User, @Channel, @Text);
             SELECT CAST(SCOPE_IDENTITY() as BIGINT)";
         
-        return await connection.QueryFirstAsync<long>(sql, @event);
+        return await connection.QueryFirstAsync<long>(sql, slackEvent);
     }
 
-    public async Task<bool> UpdateAsync(SlackEvent @event)
+    public async Task<bool> UpdateAsync(SlackEvent slackEvent)
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
@@ -50,7 +50,7 @@ public class EventRepository : IEventRepository
                 UpdatedAt = GETUTCDATE()
             WHERE Id = @Id";
         
-        var rowsAffected = await connection.ExecuteAsync(sql, @event);
+        var rowsAffected = await connection.ExecuteAsync(sql, slackEvent);
         return rowsAffected > 0;
     }
 

@@ -40,13 +40,13 @@ public class EventController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<SlackEvent>> GetEvent(long id)
     {
-        var @event = await _eventService.GetEventByIdAsync(id);
-        if (@event == null)
+        var slackEvent = await _eventService.GetEventByIdAsync(id);
+        if (slackEvent == null)
         {
             return NotFound();
         }
 
-        return @event;
+        return slackEvent;
     }
 
     [HttpGet]
@@ -57,14 +57,14 @@ public class EventController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEvent(long id, SlackEvent @event)
+    public async Task<IActionResult> UpdateEvent(long id, SlackEvent slackEvent)
     {
-        if (id != @event.Id)
+        if (id != slackEvent.Id)
         {
             return BadRequest();
         }
 
-        var success = await _eventService.UpdateEventAsync(@event);
+        var success = await _eventService.UpdateEventAsync(slackEvent);
         if (!success)
         {
             return NotFound();

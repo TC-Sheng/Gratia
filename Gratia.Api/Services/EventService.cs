@@ -22,14 +22,14 @@ public class EventService : IEventService
         return await _eventRepository.GetAllAsync();
     }
 
-    public async Task<long> CreateEventAsync(SlackEvent @event)
+    public async Task<long> CreateEventAsync(SlackEvent slackEvent)
     {
-        return await _eventRepository.CreateAsync(@event);
+        return await _eventRepository.CreateAsync(slackEvent);
     }
 
-    public async Task<bool> UpdateEventAsync(SlackEvent @event)
+    public async Task<bool> UpdateEventAsync(SlackEvent slackEvent)
     {
-        return await _eventRepository.UpdateAsync(@event);
+        return await _eventRepository.UpdateAsync(slackEvent);
     }
 
     public async Task<bool> DeleteEventAsync(long id)
