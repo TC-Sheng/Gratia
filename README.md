@@ -11,7 +11,7 @@ Gratia consists of two main subprojects:
   - Controllers
   - Services
   - Repositories
-  - Models (for input/output/request/response classes)
+  - Models
 - Uses Dapper for database operations
 - Configuration:
   - Database connection string in appsettings.json
@@ -38,7 +38,61 @@ Gratia consists of two main subprojects:
   - Table scripts
   - Data scripts
   - Stored procedure scripts
-  - Database publishing configurations
+
+## Setup Instructions
+
+1. Prerequisites:
+   - .NET 8.0 SDK
+   - SQL Server (LocalDB or full instance)
+   - Visual Studio 2022 or VS Code
+
+2. Database Setup:
+   - Open the solution in Visual Studio
+   - Right-click on the Gratia.Db project
+   - Select "Publish"
+   - Configure your database connection
+   - Click "Publish"
+
+3. API Configuration:
+   - Update the connection string in `Gratia.Api/appsettings.json`
+   - Set your Slack API tokens in `appsettings.json`:
+     ```json
+     "Slack": {
+       "ApiToken": "your-bot-user-oauth-token",
+       "AppToken": "your-app-level-token",
+       "SigningSecret": "your-signing-secret"
+     }
+     ```
+
+4. Running the API:
+   ```bash
+   cd Gratia.Api
+   dotnet run
+   ```
+
+5. API Endpoints:
+   - POST /api/event - Handle Slack events
+   - GET /api/event - Get all events
+   - GET /api/event/{id} - Get event by ID
+   - PUT /api/event/{id} - Update event
+   - DELETE /api/event/{id} - Delete event
+
+## Slack Integration
+
+1. Create a Slack App:
+   - Go to https://api.slack.com/apps
+   - Create a new app
+   - Enable Event Subscriptions
+   - Subscribe to bot events: `app_mention`
+   - Install the app to your workspace
+
+2. Configure Slack Tokens:
+   - Copy Bot User OAuth Token to `ApiToken`
+   - Copy App-Level Token to `AppToken`
+   - Copy Signing Secret to `SigningSecret` (found in Basic Information > App Credentials)
+
+3. Set Event URL:
+   - Set the Request URL to your API endpoint: `https://your-domain/api/event`
 
 ## Features
 
@@ -46,6 +100,7 @@ Gratia consists of two main subprojects:
 - Receives and processes Slack API requests
 - Stores request data in SQL Server
 - Sends messages to Slack API
+- Verifies request authenticity using signing secret
 
 ### Database Operations
 - Uses Dapper for efficient data access
