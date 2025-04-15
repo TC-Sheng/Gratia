@@ -31,11 +31,11 @@ public class EventRepository : IEventRepository
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
-            INSERT INTO Events (Type, [User], Channel, Text)
-            VALUES (@Type, @User, @Channel, @Text);
-            SELECT CAST(SCOPE_IDENTITY() as BIGINT)";
+            INSERT INTO Events (Type, [User], Channel, Text, CreatedAt, UpdatedAt)
+            VALUES (@Type, @User, @Channel, @Text, GETUTCDATE(), GETUTCDATE());
+            SELECT CAST(SCOPE_IDENTITY() as INT)";
         
-        return await connection.QueryFirstAsync<long>(sql, slackEvent);
+        return await connection.QueryFirstOrDefaultAsync<long>(sql, slackEvent);
     }
 
     public async Task<bool> UpdateAsync(SlackEvent slackEvent)
