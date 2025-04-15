@@ -20,17 +20,17 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> HandleSlackEvent([FromBody] EventCallback eventCallback)
     {
-        if (eventCallback.Event is AppMentionEvent mentionEvent)
+        if (eventCallback.Event is MessageEvent mentionEvent)
         {
-            var @event = new Event
+            var slackEvent = new SlackEvent
             {
                 Type = mentionEvent.Type,
                 User = mentionEvent.User,
                 Channel = mentionEvent.Channel,
-                Text = mentionEvent.Text
+                Text = mentionEvent.Text ?? string.Empty
             };
 
-            var eventId = await _eventService.CreateEventAsync(@event);
+            var eventId = await _eventService.CreateEventAsync(slackEvent);
             return Ok(new { id = eventId });
         }
 
@@ -38,7 +38,7 @@ public class EventController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Event>> GetEvent(long id)
+    public async Task<ActionResult<SlackEvent>> GetEvent(long id)
     {
         var @event = await _eventService.GetEventByIdAsync(id);
         if (@event == null)
@@ -50,14 +50,14 @@ public class EventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Event>>> GetAllEvents()
+    public async Task<ActionResult<IEnumerable<SlackEvent>>> GetAllEvents()
     {
         var events = await _eventService.GetAllEventsAsync();
         return Ok(events);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEvent(long id, Event @event)
+    public async Task<IActionResult> UpdateEvent(long id, SlackEvent @event)
     {
         if (id != @event.Id)
         {

@@ -6,8 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,18 +14,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 
+// Get Slack configuration
+var slackApiToken = builder.Configuration["Slack:ApiToken"] ?? throw new InvalidOperationException("Slack:ApiToken is not configured");
+var slackAppToken = builder.Configuration["Slack:AppToken"] ?? throw new InvalidOperationException("Slack:AppToken is not configured");
+var slackSigningSecret = builder.Configuration["Slack:SigningSecret"] ?? throw new InvalidOperationException("Slack:SigningSecret is not configured");
+
 // Configure Slack
 builder.Services.AddSlackNet(c => c
-    .UseApiToken(builder.Configuration["Slack:ApiToken"])
-    .UseAppLevelToken(builder.Configuration["Slack:AppToken"])
-    .UseSigningSecret(builder.Configuration["Slack:SigningSecret"]));
+    .UseApiToken(slackApiToken)
+    .UseAppLevelToken(slackAppToken)
+    .UseSigningSecret(slackSigningSecret));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

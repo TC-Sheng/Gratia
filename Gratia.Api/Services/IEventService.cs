@@ -4,9 +4,9 @@ namespace Gratia.Api.Services;
 
 public interface IEventService
 {
-    Task<Event?> GetEventByIdAsync(long id);
-    Task<IEnumerable<Event>> GetAllEventsAsync();
-    Task<long> CreateEventAsync(Event @event);
-    Task<bool> UpdateEventAsync(Event @event);
+    Task<SlackEvent?> GetEventByIdAsync(long id);
+    Task<IEnumerable<SlackEvent>> GetAllEventsAsync();
+    Task<long> CreateEventAsync(SlackEvent @event);
+    Task<bool> UpdateEventAsync(SlackEvent @event);
     Task<bool> DeleteEventAsync(long id);
 } 

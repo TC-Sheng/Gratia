@@ -13,21 +13,21 @@ public class EventRepository : IEventRepository
         _connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new ArgumentNullException(nameof(configuration));
     }
 
-    public async Task<Event?> GetByIdAsync(long id)
+    public async Task<SlackEvent?> GetByIdAsync(long id)
     {
         using var connection = new SqlConnection(_connectionString);
-        return await connection.QueryFirstOrDefaultAsync<Event>(
+        return await connection.QueryFirstOrDefaultAsync<SlackEvent>(
             "SELECT * FROM Events WHERE Id = @Id",
             new { Id = id });
     }
 
-    public async Task<IEnumerable<Event>> GetAllAsync()
+    public async Task<IEnumerable<SlackEvent>> GetAllAsync()
     {
         using var connection = new SqlConnection(_connectionString);
-        return await connection.QueryAsync<Event>("SELECT * FROM Events");
+        return await connection.QueryAsync<SlackEvent>("SELECT * FROM Events");
     }
 
-    public async Task<long> CreateAsync(Event @event)
+    public async Task<long> CreateAsync(SlackEvent @event)
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
@@ -38,7 +38,7 @@ public class EventRepository : IEventRepository
         return await connection.QueryFirstAsync<long>(sql, @event);
     }
 
-    public async Task<bool> UpdateAsync(Event @event)
+    public async Task<bool> UpdateAsync(SlackEvent @event)
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
