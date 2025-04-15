@@ -1,9 +1,16 @@
 using Gratia.Api.Models;
 using Gratia.Api.Repositories;
 using Gratia.Api.Services;
+using Serilog;
 using SlackNet.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext());
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
