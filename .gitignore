@@ -49,6 +49,8 @@ artifacts/
 *.mdf
 *.ldf
 *.ndf
+*.dbmdl
+*.jfm
 
 # Visual Studio Code
 .vscode/*
