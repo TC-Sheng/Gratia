@@ -16,14 +16,14 @@ public class EventRepository : IEventRepository
     public async Task<IEnumerable<SlackEvent>> GetAllAsync()
     {
         using var connection = new SqlConnection(_connectionString);
-        return await connection.QueryAsync<SlackEvent>("SELECT * FROM Events");
+        return await connection.QueryAsync<SlackEvent>("SELECT * FROM SlackEvents");
     }
 
     public async Task<long> CreateAsync(SlackEvent slackEvent)
     {
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
-            INSERT INTO Events (Type, [User], Channel, Text, CreatedAt, UpdatedAt)
+            INSERT INTO SlackEvents (Type, [User], Channel, Text, CreatedAt, UpdatedAt)
             VALUES (@Type, @User, @Channel, @Text, GETUTCDATE(), GETUTCDATE());
             SELECT CAST(SCOPE_IDENTITY() as INT)";
         
