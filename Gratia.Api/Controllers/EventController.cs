@@ -37,51 +37,10 @@ public class EventController : ControllerBase
         return BadRequest("Unsupported event type");
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<SlackEvent>> GetEvent(long id)
-    {
-        var slackEvent = await _eventService.GetEventByIdAsync(id);
-        if (slackEvent == null)
-        {
-            return NotFound();
-        }
-
-        return slackEvent;
-    }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<SlackEvent>>> GetAllEvents()
     {
         var events = await _eventService.GetAllEventsAsync();
         return Ok(events);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEvent(long id, SlackEvent slackEvent)
-    {
-        if (id != slackEvent.Id)
-        {
-            return BadRequest();
-        }
-
-        var success = await _eventService.UpdateEventAsync(slackEvent);
-        if (!success)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEvent(long id)
-    {
-        var success = await _eventService.DeleteEventAsync(id);
-        if (!success)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
     }
 } 
