@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gratia.Api", "Gratia.Api\Gratia.Api.csproj", "{249F00EA-9736-41BA-8628-F23AFD605F1D}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Gratia.Db", "Gratia.Db\Gratia.Db.sqlproj", "{2321A351-7F13-4EEA-BC78-99A1A7B34B09}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Gratia.Db", "Gratia.Db\Gratia.Db.sqlproj", "{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +29,12 @@ Global
 		{249F00EA-9736-41BA-8628-F23AFD605F1D}.Release|x64.Build.0 = Release|Any CPU
 		{249F00EA-9736-41BA-8628-F23AFD605F1D}.Release|x86.ActiveCfg = Release|Any CPU
 		{249F00EA-9736-41BA-8628-F23AFD605F1D}.Release|x86.Build.0 = Release|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Release|x64.ActiveCfg = Release|Any CPU
-		{2321A351-7F13-4EEA-BC78-99A1A7B34B09}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Release|x64.ActiveCfg = Release|Any CPU
+		{AAEFD83E-9D0E-453E-B7FD-7EF633E2DF39}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
