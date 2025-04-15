@@ -1,3 +1,4 @@
+using Gratia.Api.Models;
 using Gratia.Api.Repositories;
 using Gratia.Api.Services;
 using SlackNet.AspNetCore;
@@ -14,16 +15,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 
-// Get Slack configuration
-var slackApiToken = builder.Configuration["Slack:ApiToken"] ?? throw new InvalidOperationException("Slack:ApiToken is not configured");
-var slackAppToken = builder.Configuration["Slack:AppToken"] ?? throw new InvalidOperationException("Slack:AppToken is not configured");
-var slackSigningSecret = builder.Configuration["Slack:SigningSecret"] ?? throw new InvalidOperationException("Slack:SigningSecret is not configured");
-
 // Configure Slack
+var slackSettings = builder.Configuration.GetSection("Slack").Get<SlackSettings>() 
+    ?? throw new InvalidOperationException("Slack settings are not configured");
+
 builder.Services.AddSlackNet(c => c
-    .UseApiToken(slackApiToken)
-    .UseAppLevelToken(slackAppToken)
-    .UseSigningSecret(slackSigningSecret));
+    .UseApiToken(slackSettings.ApiToken)
+    .UseAppLevelToken(slackSettings.AppLevelToken)
+    .UseSigningSecret(slackSettings.SigningSecret));
 
 var app = builder.Build();
 
