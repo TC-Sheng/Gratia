@@ -121,4 +121,8 @@ artifacts/
 !.vscode/extensions.json
 
 # Rider
-.idea/ 
+.idea/
+
+# SQL Server Database Project files
+*.dbmdl
+*.jfm 
