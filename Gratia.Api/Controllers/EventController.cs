@@ -9,10 +9,8 @@ namespace Gratia.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventController(IEventService eventService, ILogger<EventController> logger, IOptions<SlackSettings> slackSettings) : ControllerBase
+public class EventController(IEventService eventService, ILogger<EventController> logger) : ControllerBase
 {
-    private readonly string _verificationToken = slackSettings.Value.VerificationToken;
-
     [HttpPost]
     public async Task<IActionResult> HandleSlackEvent([FromBody] EventRequest eventRequest)
     {
@@ -21,14 +19,15 @@ public class EventController(IEventService eventService, ILogger<EventController
         // Handle URL verification
         if (eventRequest.RequestData.Type == "url_verification")
         {
-            if (eventRequest.RequestData.Token != _verificationToken)
+            var challenge = await eventService.VerifyUrlAsync(eventRequest.RequestData.Token, eventRequest.RequestData.Event.Text);
+            if (challenge == null)
             {
                 logger.LogError("Invalid verification token");
                 return Unauthorized();
             }
 
             logger.LogInformation("URL verification successful");
-            return Ok(new { challenge = eventRequest.RequestData.Event.Text });
+            return Ok(new { challenge });
         }
 
         if (eventRequest.RequestData.Event.Type == "app_mention")
