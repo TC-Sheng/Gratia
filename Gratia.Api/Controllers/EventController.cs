@@ -28,8 +28,9 @@ public class EventController(IEventService eventService, ILogger<EventController
                     return Unauthorized();
                 }
                 
-                logger.LogInformation("URL verification success.");
-                return Ok(new { challenge });
+                var urlVerificationResponse = new { challenge };
+                logger.LogInformation("URL verification success, {@UrlVerificationResponse}", urlVerificationResponse);
+                return Ok(urlVerificationResponse);
             }
 
             // If not URL verification, try EventRequest
@@ -53,7 +54,6 @@ public class EventController(IEventService eventService, ILogger<EventController
                 };
 
                 var eventId = await eventService.CreateEventAsync(slackEvent);
-                logger.LogInformation("Created event with ID: {EventId}", eventId);
 
                 logger.LogInformation("Posting message to channel: {Channel}", slackEvent.Channel);
                 var messageText = "Bot Test";
@@ -64,7 +64,9 @@ public class EventController(IEventService eventService, ILogger<EventController
                 });
                 logger.LogInformation("Message posted to channel: {Channel}， message: {Message}", slackEvent.Channel, messageText);
 
-                return Ok(new { status = "success", message = "Event received and stored", event_id = eventId });
+                var slackEventResponse = new { status = "success", message = "Event received and stored", event_id = eventId };
+                logger.LogInformation("Slack event response: {@SlackEventResponse}", slackEventResponse);
+                return Ok(slackEventResponse);
             }
 
             logger.LogError("Unsupported event type: {EventType}", eventRequest.RequestData.Event.Type);
