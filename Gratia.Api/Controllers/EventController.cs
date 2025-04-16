@@ -25,6 +25,8 @@ public class EventController(IEventService eventService, ILogger<EventController
                     logger.LogError("Invalid verification token");
                     return Unauthorized();
                 }
+                
+                logger.LogInformation("URL verification success, Challenge: {@Challenge}", challenge);
                 return Ok(new { challenge });
             }
 
