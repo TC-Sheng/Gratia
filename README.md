@@ -48,11 +48,7 @@ Gratia consists of two main subprojects:
    - Visual Studio 2022 or VS Code
 
 2. Database Setup:
-   - Open the solution in Visual Studio
-   - Right-click on the Gratia.Db project
-   - Select "Publish"
-   - Configure your database connection
-   - Click "Publish"
+   - Run the scripts in Gratia.Db project
 
 3. API Configuration:
    - Update the database connection string in `appsettings.json`
