@@ -1,7 +1,7 @@
 using Gratia.Api.Models;
 using Gratia.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Gratia.Api.Controllers;
 
@@ -15,10 +15,10 @@ public class EventController(IEventService eventService, ILogger<EventController
         try
         {
             // Try to deserialize as UrlVerificationRequest first
-            var urlVerificationRequest = JsonConvert.DeserializeObject<UrlVerificationRequest>(request.ToString() ?? string.Empty);
+            var urlVerificationRequest = JsonSerializer.Deserialize<UrlVerificationRequest>(request.ToString() ?? string.Empty);
             if (urlVerificationRequest?.Type == "url_verification")
             {
-                logger.LogInformation("Received URL verification request: {@UrlVerificationRequest}", urlVerificationRequest);
+                logger.LogInformation("Received URL verification: {@UrlVerificationRequest}", urlVerificationRequest);
                 var challenge = eventService.VerifyUrl(urlVerificationRequest.Token, urlVerificationRequest.Challenge);
                 if (challenge == null)
                 {
@@ -29,7 +29,7 @@ public class EventController(IEventService eventService, ILogger<EventController
             }
 
             // If not URL verification, try EventRequest
-            var eventRequest = JsonConvert.DeserializeObject<EventRequest>(request.ToString() ?? string.Empty);
+            var eventRequest = JsonSerializer.Deserialize<EventRequest>(request.ToString() ?? string.Empty);
             if (eventRequest == null)
             {
                 logger.LogError("Invalid request format");
