@@ -129,3 +129,8 @@ Response: List of events
 - text: Message content
 - created_at: Creation timestamp
 - updated_at: Update timestamp
+
+## Change App Name / Bot Name
+- Change App name in Settings > Basic Information > Display Information
+- Change App Display Name in Features > App Home > App Display Name
+- Change Bot tag in Click Your App Icon > About > Configuration > Bot User
