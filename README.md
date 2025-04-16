@@ -89,36 +89,6 @@ Gratia consists of two main subprojects:
 3. Set Event URL:
    - Set the Request URL to your API endpoint: `https://your-domain/api/event`
 
-## API Specifications
-
-### Event API
-```
-POST /api/event
-Purpose: Handle Slack events
-Request Body:
-{
-    "token": "verification_token",
-    "team_id": "team_id",
-    "event": {
-        "type": "app_mention",
-        "user": "user_id",
-        "text": "message_content",
-        "channel": "channel_id"
-    },
-    "type": "event_callback"
-}
-Response:
-- Success: 200 OK with response body
-- Failure: Appropriate error status code
-```
-
-### Get Events API
-```
-GET /api/event
-Purpose: Get all events
-Response: List of events
-```
-
 ## Database Structure
 
 ### SlackEvents table
