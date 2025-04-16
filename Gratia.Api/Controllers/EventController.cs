@@ -2,12 +2,14 @@ using Gratia.Api.Models;
 using Gratia.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using SlackNet;
+using SlackNet.WebApi;
 
 namespace Gratia.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventController(IEventService eventService, ILogger<EventController> logger) : ControllerBase
+public class EventController(IEventService eventService, ILogger<EventController> logger, ISlackApiClient slack) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> HandleSlackEvent([FromBody] object request)
@@ -52,6 +54,16 @@ public class EventController(IEventService eventService, ILogger<EventController
 
                 var eventId = await eventService.CreateEventAsync(slackEvent);
                 logger.LogInformation("Created event with ID: {EventId}", eventId);
+
+                logger.LogInformation("Posting message to channel: {Channel}", slackEvent.Channel);
+                var messageText = "Bot Test";
+                await slack.Chat.PostMessage(new Message
+                {
+                    Text = messageText,
+                    Channel = slackEvent.Channel
+                });
+                logger.LogInformation("Message posted to channel: {Channel}， message: {Message}", slackEvent.Channel, messageText);
+
                 return Ok(new { status = "success", message = "Event received and stored", event_id = eventId });
             }
 
