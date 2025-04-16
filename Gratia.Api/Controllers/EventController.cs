@@ -1,9 +1,7 @@
 using Gratia.Api.Models;
 using Gratia.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using SlackNet.AspNetCore;
+using Newtonsoft.Json;
 
 namespace Gratia.Api.Controllers;
 
@@ -12,41 +10,57 @@ namespace Gratia.Api.Controllers;
 public class EventController(IEventService eventService, ILogger<EventController> logger) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> HandleSlackEvent([FromBody] EventRequest eventRequest)
+    public async Task<IActionResult> HandleSlackEvent([FromBody] object request)
     {
-        logger.LogInformation("Received Slack event: {@EventRequest}", eventRequest);
-
-        // Handle URL verification
-        if (eventRequest.RequestData.Type == "url_verification")
+        try
         {
-            var challenge = await eventService.VerifyUrlAsync(eventRequest.RequestData.Token, eventRequest.RequestData.Event.Text);
-            if (challenge == null)
+            // Try to deserialize as UrlVerificationRequest first
+            var urlVerificationRequest = JsonConvert.DeserializeObject<UrlVerificationRequest>(request.ToString() ?? string.Empty);
+            if (urlVerificationRequest?.Type == "url_verification")
             {
-                logger.LogError("Invalid verification token");
-                return Unauthorized();
+                logger.LogInformation("Received URL verification request: {@UrlVerificationRequest}", urlVerificationRequest);
+                var challenge = await eventService.VerifyUrlAsync(urlVerificationRequest.Token, urlVerificationRequest.Challenge);
+                if (challenge == null)
+                {
+                    logger.LogError("Invalid verification token");
+                    return Unauthorized();
+                }
+                return Ok(new { challenge });
             }
 
-            logger.LogInformation("URL verification successful");
-            return Ok(new { challenge });
-        }
-
-        if (eventRequest.RequestData.Event.Type == "app_mention")
-        {
-            var slackEvent = new SlackEvent
+            // If not URL verification, try EventRequest
+            var eventRequest = JsonConvert.DeserializeObject<EventRequest>(request.ToString() ?? string.Empty);
+            if (eventRequest == null)
             {
-                Type = eventRequest.RequestData.Event.Type,
-                User = eventRequest.RequestData.Event.User,
-                Channel = eventRequest.RequestData.Event.Channel,
-                Text = eventRequest.RequestData.Event.Text
-            };
+                logger.LogError("Invalid request format");
+                return BadRequest("Invalid request format");
+            }
 
-            var eventId = await eventService.CreateEventAsync(slackEvent);
-            logger.LogInformation("Created event with ID: {EventId}", eventId);
-            return Ok(new { id = eventId });
+            logger.LogInformation("Received Slack event: {@EventRequest}", eventRequest);
+
+            if (eventRequest.RequestData.Event.Type == "app_mention")
+            {
+                var slackEvent = new SlackEvent
+                {
+                    Type = eventRequest.RequestData.Event.Type,
+                    User = eventRequest.RequestData.Event.User,
+                    Channel = eventRequest.RequestData.Event.Channel,
+                    Text = eventRequest.RequestData.Event.Text
+                };
+
+                var eventId = await eventService.CreateEventAsync(slackEvent);
+                logger.LogInformation("Created event with ID: {EventId}", eventId);
+                return Ok(new { status = "success", message = "Event received and stored", event_id = eventId });
+            }
+
+            logger.LogError("Unsupported event type: {EventType}", eventRequest.RequestData.Event.Type);
+            return BadRequest("Unsupported event type");
         }
-
-        logger.LogError("Unsupported event type: {EventType}", eventRequest.RequestData.Event.Type);
-        return BadRequest("Unsupported event type");
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error processing request");
+            return BadRequest("Invalid request format");
+        }
     }
 
     [HttpGet]
