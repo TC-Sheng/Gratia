@@ -24,7 +24,7 @@ public class EventService : IEventService
         return await _eventRepository.GetAllAsync();
     }
 
-    public async Task<string?> VerifyUrlAsync(string token, string challenge)
+    public string? VerifyUrl(string token, string challenge)
     {
         if (token != _verificationToken)
         {
