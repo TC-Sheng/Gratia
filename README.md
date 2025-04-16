@@ -15,22 +15,7 @@ Gratia consists of two main subprojects:
 - Uses Dapper for database operations
 - Configuration:
   - Database connection string in appsettings.json
-  - Uses QueryFirstOrDefaultAsync for database queries
-  - Logging configuration in appsettings.json:
-    ```json
-    {
-      "Logging": {
-        "LogLevel": {
-          "Default": "Information",
-          "Microsoft.AspNetCore": "Warning"
-        },
-        "File": {
-          "Path": "logs/gratia-{Date}.log",
-          "MinimumLevel": "Information"
-        }
-      }
-    }
-    ```
+  - Logging configuration in appsettings.json
 
 ### Gratia.Db
 - SQL Server Database Project
@@ -38,6 +23,25 @@ Gratia consists of two main subprojects:
   - Table scripts
   - Data scripts
   - Stored procedure scripts
+
+## Current Features
+
+### Slack Integration
+1. Event Handling
+   - URL verification for Slack events
+   - App mention detection
+   - Message content validation with regex
+   - Bot response generation
+
+2. Bot Responses
+   - Random appreciation messages
+   - Configurable responses in appsettings.json
+   - Emoji support in responses
+
+3. Message Processing
+   - Detects user mentions using regex pattern `<@[A-Z0-9]+>`
+   - Stores event data in database
+   - Sends bot responses to channels
 
 ## Setup Instructions
 
@@ -54,42 +58,40 @@ Gratia consists of two main subprojects:
    - Click "Publish"
 
 3. API Configuration:
-   - Update the connection string in `Gratia.Api/appsettings.json`
+   - Update the database connection string in `appsettings.json`
    - Set your Slack API tokens in `appsettings.json`:
      ```json
      "Slack": {
        "ApiToken": "your-bot-user-oauth-token",
-       "AppToken": "your-app-level-token",
-       "SigningSecret": "your-signing-secret"
+       "AppLevelToken": "your-app-level-token",
+       "SigningSecret": "your-signing-secret",
+       "VerificationToken": "your-verification-token"
      }
      ```
-
-4. Running the API:
-   ```bash
-   cd Gratia.Api
-   dotnet run
-   ```
-
-5. API Endpoints:
+     
+4. API Endpoints:
    - POST /api/event - Handle Slack events
    - GET /api/event - Get all events
-   - GET /api/event/{id} - Get event by ID
-   - PUT /api/event/{id} - Update event
-   - DELETE /api/event/{id} - Delete event
 
 ## Slack Integration
 
 1. Create a Slack App:
    - Go to https://api.slack.com/apps
    - Create a new app
-   - Enable Event Subscriptions
-   - Subscribe to bot events: `app_mention`
+   - Enable Event Subscriptions, 
+   - Subscribe to bot events: `app_mention`, `message.channels`
+   - Add Scopes in OAuth & Permissions
+    - Bot Token Scopes:
+      `app_mentions:read`,`channels:history`,`channels:read`,`chat:write`,`emoji:read`,`groups:history`,`groups:read`,`im:read`,`im:write`,`users:read`
+    - User Token Scopes:
+      `chat:write`
    - Install the app to your workspace
 
 2. Configure Slack Tokens:
    - Copy Bot User OAuth Token to `ApiToken`
-   - Copy App-Level Token to `AppToken`
-   - Copy Signing Secret to `SigningSecret` (found in Basic Information > App Credentials)
+   - Copy App-Level OAuth Token to `AppLevelToken` (Optional, required for socket mode)
+   - Copy Signing Secret to `SigningSecret`
+   - Copy Verification Token to `VerificationToken`
 
 3. Set Event URL:
    - Set the Request URL to your API endpoint: `https://your-domain/api/event`
@@ -109,7 +111,7 @@ Gratia consists of two main subprojects:
 
 ## API Specifications
 
-### 1. Event API
+### Event API
 ```
 POST /api/event
 Purpose: Handle Slack events
@@ -126,8 +128,15 @@ Request Body:
     "type": "event_callback"
 }
 Response:
-- Success: 200 OK
+- Success: 200 OK with response body
 - Failure: Appropriate error status code
+```
+
+### Get Events API
+```
+GET /api/event
+Purpose: Get all events
+Response: List of events
 ```
 
 ## Database Structure
