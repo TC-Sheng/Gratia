@@ -1,7 +1,6 @@
 using Gratia.Api.Models;
 using Gratia.Api.Repositories;
 using Microsoft.Extensions.Options;
-
 namespace Gratia.Api.Services;
 
 public class EventService : IEventService
@@ -25,13 +24,13 @@ public class EventService : IEventService
         return await _eventRepository.GetAllAsync();
     }
 
-    public Task<string?> VerifyUrlAsync(string token, string challenge)
+    public async Task<string?> VerifyUrlAsync(string token, string challenge)
     {
         if (token != _verificationToken)
         {
-            return Task.FromResult<string?>(null);
+            return null;
         }
 
-        return Task.FromResult<string?>(challenge);
+        return challenge;
     }
 } 

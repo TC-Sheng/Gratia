@@ -24,7 +24,7 @@ public class EventRepository : IEventRepository
         using var connection = new SqlConnection(_connectionString);
         var sql = @"
             INSERT INTO SlackEvents (Type, [User], Channel, Text, CreatedAt, UpdatedAt)
-            VALUES (@Type, @User, @Channel, @Text, GETUTCDATE(), GETUTCDATE());
+            VALUES (@Type, @User, @Channel, @Text, GETDATE(), GETDATE());
             SELECT CAST(SCOPE_IDENTITY() as INT)";
         
         return await connection.QueryFirstOrDefaultAsync<long>(sql, slackEvent);
