@@ -29,7 +29,7 @@ public class EventController(IEventService eventService, ILogger<EventController
                 }
                 
                 var urlVerificationResponse = new { challenge };
-                logger.LogInformation("URL verification success, {@UrlVerificationResponse}", urlVerificationResponse);
+                logger.LogInformation("URL verification response: {@UrlVerificationResponse}", urlVerificationResponse);
                 return Ok(urlVerificationResponse);
             }
 
