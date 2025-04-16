@@ -17,7 +17,8 @@ public class EventController(IEventService eventService, ILogger<EventController
         try
         {
             // Try to deserialize as UrlVerificationRequest first
-            var urlVerificationRequest = JsonSerializer.Deserialize<UrlVerificationRequest>(request.ToString() ?? string.Empty);
+            var requestJson = request.ToString() ?? string.Empty;
+            var urlVerificationRequest = JsonSerializer.Deserialize<UrlVerificationRequest>(requestJson);
             if (urlVerificationRequest?.Type == "url_verification")
             {
                 logger.LogInformation("Received URL verification: {@UrlVerificationRequest}", urlVerificationRequest);
@@ -34,8 +35,12 @@ public class EventController(IEventService eventService, ILogger<EventController
             }
 
             // If not URL verification, try EventRequest
-            var eventRequest = JsonSerializer.Deserialize<EventRequest>(request.ToString() ?? string.Empty);
-            if (eventRequest == null)
+            var eventRequest = new EventRequest
+            {
+                RequestData = JsonSerializer.Deserialize<RequestData>(requestJson) ?? new RequestData()
+            };
+
+            if (eventRequest.RequestData == null)
             {
                 logger.LogError("Invalid request format");
                 return BadRequest("Invalid request format");
