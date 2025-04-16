@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using SlackNet;
 using SlackNet.WebApi;
+using System.Text.RegularExpressions;
 
 namespace Gratia.Api.Controllers;
 
@@ -48,25 +49,34 @@ public class EventController(IEventService eventService, ILogger<EventController
 
             logger.LogInformation("Received Slack event: {@EventRequest}", eventRequest);
 
-            if (eventRequest.RequestData.Event.Type == "app_mention")
+            if (eventRequest.RequestData.Event.Type == "app_mention" || eventRequest.RequestData.Event.Type == "message")
             {
+                var messageText = eventRequest.RequestData.Event.Text;
+                var hasMentionUser = Regex.IsMatch(messageText, @"<@[A-Z0-9]+>");
+
+                if (!hasMentionUser)
+                {
+                    logger.LogError("Message does not mention any user");
+                    return BadRequest("No mention found");
+                }
+
                 var slackEvent = new SlackEvent
                 {
                     Type = eventRequest.RequestData.Event.Type,
                     User = eventRequest.RequestData.Event.User,
                     Channel = eventRequest.RequestData.Event.Channel,
-                    Text = eventRequest.RequestData.Event.Text
+                    Text = messageText
                 };
 
                 var eventId = await eventService.CreateEventAsync(slackEvent);
                 logger.LogInformation("Posting message to channel: {Channel}", slackEvent.Channel);
-                var messageText = eventService.GenerateBotMessage();
+                var botMessage = eventService.GenerateBotMessage();
                 await slack.Chat.PostMessage(new Message
                 {
-                    Text = messageText,
+                    Text = botMessage,
                     Channel = slackEvent.Channel
                 });
-                logger.LogInformation("Message posted to channel: {Channel}， message: {Message}", slackEvent.Channel, messageText);
+                logger.LogInformation("Message posted to channel: {Channel}， message: {Message}", slackEvent.Channel, botMessage);
 
                 var slackEventResponse = new { status = "success", message = "Event received and stored", event_id = eventId };
                 logger.LogInformation("Slack event response: {@SlackEventResponse}", slackEventResponse);
