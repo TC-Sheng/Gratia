@@ -93,14 +93,6 @@ Gratia consists of two main subprojects:
 3. Set Event URL:
    - Set the Request URL to your API endpoint: `https://your-domain/api/event`
 
-## Features
-
-### Slack Integration
-- Receives and processes Slack API requests
-- Stores request data in SQL Server
-- Sends messages to Slack API
-- Verifies request authenticity
-
 ## API Specifications
 
 ### Event API
