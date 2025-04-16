@@ -5,9 +5,12 @@
     <Name>Gratia.Db</Name>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <ModelCollation>1033, CI</ModelCollation>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
   </PropertyGroup>
-
   <ItemGroup>
-    <Build Include="Tables\Events.sql" />
+    <Folder Include="Tables\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\SlackEvents.sql" />
   </ItemGroup>
 </Project>
