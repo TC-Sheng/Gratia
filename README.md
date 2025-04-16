@@ -121,7 +121,7 @@ Response: List of events
 
 ## Database Structure
 
-### events table
+### SlackEvents table
 - id: Primary key
 - type: Event type
 - user: User ID
