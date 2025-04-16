@@ -26,7 +26,7 @@ public class EventController(IEventService eventService, ILogger<EventController
                     return Unauthorized();
                 }
                 
-                logger.LogInformation("URL verification success, Challenge: {@Challenge}", challenge);
+                logger.LogInformation("URL verification success.");
                 return Ok(new { challenge });
             }
 
