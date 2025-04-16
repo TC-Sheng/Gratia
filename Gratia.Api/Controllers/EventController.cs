@@ -59,9 +59,8 @@ public class EventController(IEventService eventService, ILogger<EventController
                 };
 
                 var eventId = await eventService.CreateEventAsync(slackEvent);
-
                 logger.LogInformation("Posting message to channel: {Channel}", slackEvent.Channel);
-                var messageText = "Bot Test";
+                var messageText = eventService.GenerateBotMessage();
                 await slack.Chat.PostMessage(new Message
                 {
                     Text = messageText,
