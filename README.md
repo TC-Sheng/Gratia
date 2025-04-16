@@ -131,6 +131,12 @@ Response: List of events
 - updated_at: Update timestamp
 
 ## Change App Name / Bot Name
-- Change App name in Settings > Basic Information > Display Information
-- Change App Display Name in Features > App Home > App Display Name
-- Change Bot tag in Click Your App Icon > About > Configuration > Bot User
+- Change App name 
+  - Go to https://api.slack.com/apps
+  - Settings > Basic Information > Display Information
+- Change App Display Name 
+  - Go to https://api.slack.com/apps
+  - Features > App Home > App Display Name
+- Change Bot tag in 
+  - Go to Slack Application
+  - Click Your App Icon > About > Configuration > Bot User
