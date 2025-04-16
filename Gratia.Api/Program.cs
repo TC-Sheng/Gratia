@@ -23,6 +23,8 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 
 // Configure Slack
+builder.Services.Configure<SlackSettings>(builder.Configuration.GetSection("Slack"));
+
 var slackSettings = builder.Configuration.GetSection("Slack").Get<SlackSettings>() 
     ?? throw new InvalidOperationException("Slack settings are not configured");
 
