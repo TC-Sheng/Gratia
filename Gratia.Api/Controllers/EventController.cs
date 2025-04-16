@@ -19,7 +19,7 @@ public class EventController(IEventService eventService, ILogger<EventController
             if (urlVerificationRequest?.Type == "url_verification")
             {
                 logger.LogInformation("Received URL verification request: {@UrlVerificationRequest}", urlVerificationRequest);
-                var challenge = await eventService.VerifyUrlAsync(urlVerificationRequest.Token, urlVerificationRequest.Challenge);
+                var challenge = await eventService.VerifyUrl(urlVerificationRequest.Token, urlVerificationRequest.Challenge);
                 if (challenge == null)
                 {
                     logger.LogError("Invalid verification token");
