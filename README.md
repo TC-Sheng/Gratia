@@ -21,8 +21,6 @@ Gratia consists of two main subprojects:
 - SQL Server Database Project
 - Contains:
   - Table scripts
-  - Data scripts
-  - Stored procedure scripts
 
 ## Current Features
 
@@ -39,7 +37,6 @@ Gratia consists of two main subprojects:
    - Emoji support in responses
 
 3. Message Processing
-   - Detects user mentions using regex pattern `<@[A-Z0-9]+>`
    - Stores event data in database
    - Sends bot responses to channels
 
@@ -68,7 +65,7 @@ Gratia consists of two main subprojects:
        "VerificationToken": "your-verification-token"
      }
      ```
-     
+
 4. API Endpoints:
    - POST /api/event - Handle Slack events
    - GET /api/event - Get all events
@@ -102,12 +99,7 @@ Gratia consists of two main subprojects:
 - Receives and processes Slack API requests
 - Stores request data in SQL Server
 - Sends messages to Slack API
-- Verifies request authenticity using signing secret
-
-### Database Operations
-- Uses Dapper for efficient data access
-- Centralized database scripts management
-- Supports database publishing and versioning
+- Verifies request authenticity
 
 ## API Specifications
 
