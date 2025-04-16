@@ -137,6 +137,6 @@ Response: List of events
 - Change App Display Name 
   - Go to https://api.slack.com/apps
   - Features > App Home > App Display Name
-- Change Bot tag in 
+- Change Bot tag
   - Go to Slack Application
   - Click Your App Icon > About > Configuration > Bot User
