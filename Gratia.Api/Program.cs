@@ -1,3 +1,4 @@
+using System.Net;
 using Gratia.Api.Models;
 using Gratia.Api.Repositories;
 using Gratia.Api.Services;
@@ -13,7 +14,6 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .Enrich.FromLogContext());
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,6 +42,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/", () => $"Hi this is Gratia API.");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
