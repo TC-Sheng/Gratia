@@ -1,3 +1,4 @@
+using System.Net;
 using Gratia.Api.Models;
 using Gratia.Api.Repositories;
 using Gratia.Api.Services;
@@ -42,6 +43,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/", () => $"Hi this is Gratia API.");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
